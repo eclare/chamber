@@ -1,0 +1,7 @@
+/.bundle
+/vendor
+/log/*.log
+/data/words.txt
+/data/azure_access_token.txt
+/config/settings.yml
+/tmp/pids/*.pid

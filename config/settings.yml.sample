@@ -1,8 +1,0 @@
-slack:
-  team: team
-  access_token: token
-  channel: "#development"
-  username: mybot
-azure:
-  client_id: client
-  client_secret: secret

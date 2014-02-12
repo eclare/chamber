@@ -1,22 +1,19 @@
 # coding: utf-8
 require "sinatra"
-require "sinatra/config_file"
 require "rest_client"
 require "slack-notify"
 require "fileutils"
 require "erb"
 
-config_file './config/settings.yml'
-
 use Rack::Logger
 
-SLACK_TEAM_DOMAIN  = settings.slack["team"]
-SLACK_ACCESS_TOKEN = settings.slack["access_token"]
-SLACK_CHANNEL      = settings.slack["channel"]
-SLACK_USERNAME     = settings.slack["username"]
+SLACK_TEAM         = ENV["SLACK_TEAM"]
+SLACK_ACCESS_TOKEN = ENV["SLACK_ACCESS_TOKEN"]
+SLACK_CHANNEL      = ENV["SLACK_CHANNEL"]
+SLACK_USERNAME     = ENV["SLACK_USERNAME"]
 
-AZURE_CLIENT_ID     = settings.azure["client_id"]
-AZURE_CLIENT_SECRET = settings.azure["client_secret"]
+AZURE_CLIENT_ID     = ENV["AZURE_CLIENT_ID"]
+AZURE_CLIENT_SECRET = ENV["AZURE_CLIENT_SECRET"]
 
 STORES_FILE             = "./data/words.txt"
 AZURE_ACCESS_TOKEN_FILE = "./data/azure_access_token.txt"
@@ -30,7 +27,7 @@ helpers do
     end
 
   def slack_client
-    @client ||= SlackNotify::Client.new(SLACK_TEAM_DOMAIN, SLACK_ACCESS_TOKEN, {
+    @client ||= SlackNotify::Client.new(SLACK_TEAM, SLACK_ACCESS_TOKEN, {
       channel: SLACK_CHANNEL,
       username: SLACK_USERNAME,
     })
@@ -76,6 +73,10 @@ helpers do
     res = RestClient.get(url, headers)
     res.force_encoding("UTF-8").sub(/<string.*?">(.*)<\/string>/, '\1')
   end
+end
+
+get "/" do
+  "ok"
 end
 
 post "/" do

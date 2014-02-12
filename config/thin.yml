@@ -1,6 +1,0 @@
-pid: tmp/pids/thin.pid
-log: log/thin.log
-servers: 1
-port: 9293
-daemonize: true
-environment: development

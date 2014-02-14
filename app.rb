@@ -80,6 +80,10 @@ get "/" do
 end
 
 post "/" do
+  unless params["team_domain"] == SLACK_TEAM
+    halt 200, ""
+  end
+
   word = params["text"]
 
   if word =~ /^@#{SLACK_USERNAME}: .*何と言っている？$/ || word =~ /^@#{SLACK_USERNAME}: translate$/i

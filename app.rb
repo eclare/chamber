@@ -56,9 +56,17 @@ helpers do
     token
   end
 
-  def translate(text)
-    # judge language
-    # ref. http://aoyagikouhei.blog8.fc2.com/blog-entry-163.html
+  def translate(text, way)
+    url = "http://api.microsofttranslator.com/v2/Http.svc/Translate?from=#{way[:from]}&to=#{way[:to]}&text=#{ERB::Util.url_encode(text)}"
+    token = get_microsoft_access_token
+    headers = {"Authorization" => "Bearer #{token}"}
+
+    res = RestClient.get(url, headers)
+    res.force_encoding("UTF-8").sub(/<string.*?">(.*)<\/string>/, '\1')
+  end
+
+  # ref. http://aoyagikouhei.blog8.fc2.com/blog-entry-163.html
+  def judge_lang(text)
     if /(?:\p{Hiragana}|\p{Katakana}|[一-龠々])/ === text
       from = "ja"
       to   = "en"
@@ -66,12 +74,7 @@ helpers do
       from = "en"
       to   = "ja"
     end
-    url = "http://api.microsofttranslator.com/v2/Http.svc/Translate?from=#{from}&to=#{to}&text=#{ERB::Util.url_encode(text)}"
-    token = get_microsoft_access_token
-    headers = {"Authorization" => "Bearer #{token}"}
-
-    res = RestClient.get(url, headers)
-    res.force_encoding("UTF-8").sub(/<string.*?">(.*)<\/string>/, '\1')
+    return {from: from, to: to}
   end
 end
 
@@ -89,10 +92,16 @@ post "/" do
   if word =~ /^@#{SLACK_USERNAME}: .*何と言っている？$/ || word =~ /^@#{SLACK_USERNAME}: translate$/i
     latest = open("|tail -n 1 < #{STORES_FILE}") { |f| f.gets.chomp }
 
-    translated = translate(latest)
+    way = judge_lang(latest)
+    translated = translate(latest, way)
     logger.info("translated word is #{translated}")
 
-    slack_client.notify(translated)
+    says = if way[:to] == "ja"
+             "「#{translated}」と言っている。"
+           else
+             "\"#{translated}\""
+           end
+    slack_client.notify(says)
   else
     File.open(STORES_FILE, 'a') do |f|
       f.puts word

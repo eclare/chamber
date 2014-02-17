@@ -5,6 +5,8 @@ require "slack-notify"
 require "fileutils"
 require "erb"
 
+set :show_exceptions, false
+
 use Rack::Logger
 
 SLACK_TEAM         = ENV["SLACK_TEAM"]
@@ -112,5 +114,6 @@ post "/" do
 end
 
 error do
+  status 200
   body ""
 end

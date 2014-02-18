@@ -5,3 +5,8 @@ gem 'sinatra'
 gem 'thin'
 gem 'rest_client'
 gem 'slack-notify'
+
+group :test do
+  gem 'rspec'
+  gem 'rack-test'
+end

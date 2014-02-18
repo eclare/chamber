@@ -6,6 +6,8 @@ gem 'thin'
 gem 'rest_client'
 gem 'slack-notify'
 
+gem 'rake'
+
 group :test do
   gem 'rspec'
   gem 'rack-test'

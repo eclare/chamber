@@ -13,6 +13,9 @@ set :logging, false
 
 RSpec.configure do |conf|
   conf.include Rack::Test::Methods
+  conf.expect_with :rspec do |c|
+    c.syntax = :expect
+  end
 end
 
 def app

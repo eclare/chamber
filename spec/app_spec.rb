@@ -38,5 +38,6 @@ describe "POST /" do
 
     it_behaves_like "200 ok"
     it_behaves_like "empty body"
+    specify { expect(words_file.size).to eq(0) }
   end
 end

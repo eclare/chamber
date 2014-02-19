@@ -3,6 +3,8 @@ Chamber
 
 ![screenshot](screenshot.png)
 
+[![Build Status](https://travis-ci.org/rightgo09/chamber.png?branch=master)](https://travis-ci.org/rightgo09/chamber)
+
 Chamber is a tool that translates [Slack](https://slack.com/) messages using [The Microsoft Translator API](http://www.microsoft.com/en-us/translator/developers.aspx).
 Currently, Chamber supports translating from English to Japanese and from Japanese to English.
 The name of Chamber is taken from the character by the Japanese animation [翠星のガルガンティア](http://gargantia.jp/) (Gargantia on the Verdurous Planet).

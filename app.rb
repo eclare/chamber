@@ -17,10 +17,10 @@ SLACK_USERNAME     = ENV["SLACK_USERNAME"]
 AZURE_CLIENT_ID     = ENV["AZURE_CLIENT_ID"]
 AZURE_CLIENT_SECRET = ENV["AZURE_CLIENT_SECRET"]
 
-STORES_FILE             = "./data/words.txt"
+SLACK_WORDS_FILE        = ENV["SLACK_WORDS_FILE"] || "./data/words.txt"
 AZURE_ACCESS_TOKEN_FILE = "./data/azure_access_token.txt"
 
-FileUtils.touch STORES_FILE             unless File.exist? STORES_FILE
+FileUtils.touch SLACK_WORDS_FILE        unless File.exist? SLACK_WORDS_FILE
 FileUtils.touch AZURE_ACCESS_TOKEN_FILE unless File.exist? AZURE_ACCESS_TOKEN_FILE
 
 helpers do
@@ -92,7 +92,7 @@ post "/" do
   word = params["text"]
 
   if word =~ /何と言っている？$/ || word =~ /translate$/i
-    latest = open("|tail -n 1 < #{STORES_FILE}") { |f| f.gets.chomp }
+    latest = open("|tail -n 1 < #{SLACK_WORDS_FILE}") { |f| f.gets.chomp }
 
     way = judge_lang(latest)
     translated = translate(latest, way)
@@ -105,7 +105,7 @@ post "/" do
            end
     slack_client.notify(says)
   else
-    File.open(STORES_FILE, 'a') do |f|
+    File.open(SLACK_WORDS_FILE, 'a') do |f|
       f.puts word
     end
   end

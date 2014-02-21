@@ -91,7 +91,7 @@ post "/" do
 
   word = params["text"]
 
-  if word =~ /何と言っている？$/ || word =~ /translate$/i
+  if word =~ /何と言っている？$/ || word =~ /translate$/i || word == ".."
     latest = open("|tail -n 1 < #{SLACK_WORDS_FILE}") { |f| f.gets.chomp }
 
     way = judge_lang(latest)

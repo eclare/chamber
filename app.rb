@@ -17,8 +17,8 @@ SLACK_USERNAME     = ENV["SLACK_USERNAME"]
 AZURE_CLIENT_ID     = ENV["AZURE_CLIENT_ID"]
 AZURE_CLIENT_SECRET = ENV["AZURE_CLIENT_SECRET"]
 
-SLACK_WORDS_FILE        = ENV["SLACK_WORDS_FILE"] || "./data/words.txt"
-AZURE_ACCESS_TOKEN_FILE = "./data/azure_access_token.txt"
+SLACK_WORDS_FILE        = ENV["SLACK_WORDS_FILE"] || File.expand_path(File.join('..', 'data', 'words.txt'), __FILE__)
+AZURE_ACCESS_TOKEN_FILE = File.expand_path(File.join('..', 'data', 'azure_access_token.txt'), __FILE__)
 
 FileUtils.touch SLACK_WORDS_FILE        unless File.exist? SLACK_WORDS_FILE
 FileUtils.touch AZURE_ACCESS_TOKEN_FILE unless File.exist? AZURE_ACCESS_TOKEN_FILE

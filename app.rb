@@ -94,6 +94,7 @@ post "/" do
   if word =~ /何と言っている？$/ || word =~ /translate$/i || word == ".."
     latest = open("|tail -n 1 < #{SLACK_WORDS_FILE}") { |f| f.gets.chomp }
 
+    logger.info("original word is #{translated}")
     way = judge_lang(latest)
     translated = translate(latest, way)
     logger.info("translated word is #{translated}")

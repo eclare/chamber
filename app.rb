@@ -23,6 +23,12 @@ AZURE_ACCESS_TOKEN_FILE = File.expand_path(File.join('..', 'data', 'azure_access
 FileUtils.touch SLACK_WORDS_FILE        unless File.exist? SLACK_WORDS_FILE
 FileUtils.touch AZURE_ACCESS_TOKEN_FILE unless File.exist? AZURE_ACCESS_TOKEN_FILE
 
+TRIGGER_REGEXP = [
+  /何と言っている？/,
+  /translate$/i,
+  /^\.\.$/,
+]
+
 helpers do
     def logger
       request.logger
@@ -91,7 +97,7 @@ post "/" do
 
   word = params["text"]
 
-  if word =~ /何と言っている？$/ || word =~ /translate$/i || word == ".."
+  if TRIGGER_REGEXP.any? { |trigger| trigger === word }
     latest = open("|tail -n 1 < #{SLACK_WORDS_FILE}") { |f| f.gets.chomp }
 
     logger.info("original word is #{translated}")

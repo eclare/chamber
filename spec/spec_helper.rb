@@ -1,3 +1,15 @@
+# refs. https://coveralls.io/docs/ruby
+require 'simplecov'
+require 'coveralls'
+ 
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
+SimpleCov.start do
+  add_filter '/vendor/bundle'
+end
+
 # refs. http://qiita.com/rhzk/items/606c1d58afcfb06f14c4
 ENV['RACK_ENV'] = 'test'
 

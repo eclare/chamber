@@ -5,3 +5,4 @@
 /data/azure_access_token.txt
 /config/settings.yml
 /tmp/pids/*.pid
+/coverage

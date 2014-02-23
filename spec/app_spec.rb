@@ -30,8 +30,8 @@ describe "POST /" do
   let(:team_domain) { "hogehoge" }
 
   before do
-    ENV["SLACK_TEAM"] = team_domain
-    ENV["SLACK_WORDS_FILE"] = words_file.path
+    stub_const("SLACK_TEAM", "hogehoge")
+    stub_const("SLACK_WORDS_FILE", words_file.path)
   end
   after { words_file.close! }
 
@@ -53,5 +53,15 @@ describe "POST /" do
     it_behaves_like "200 ok"
     it_behaves_like "empty body"
     it_behaves_like "the size of word file is 0"
+  end
+
+  context "not trigger word" do
+    before { post "/", params }
+
+    it_behaves_like "200 ok"
+    it_behaves_like "empty body"
+    specify "the word is stored" do
+      expect(File.read(words_file.path)).to eq("#{text}\n")
+    end
   end
 end

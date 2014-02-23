@@ -13,6 +13,10 @@ shared_examples "empty body" do
   end
 end
 
+shared_examples "the size of word file is 0" do
+  specify { expect(words_file.size).to eq(0) }
+end
+
 describe "GET /" do
   before { get "/" }
   subject(:response) { last_response }
@@ -22,22 +26,32 @@ end
 describe "POST /" do
   let(:params) { {team_domain: team_domain, text: text} }
   let(:words_file) { Tempfile.open("words") }
-  before { ENV["SLACK_WORDS_FILE"] = words_file.path }
+  let(:text) { "something" }
+  let(:team_domain) { "hogehoge" }
+
+  before do
+    ENV["SLACK_TEAM"] = team_domain
+    ENV["SLACK_WORDS_FILE"] = words_file.path
+  end
   after { words_file.close! }
 
+  subject(:response) { last_response }
+
   context "invalid team domain" do
-    let(:team_domain) { "hogehoge" }
-    let(:text) { "something" }
+    let(:team_domain) { "fugafuga" }
 
-    before do
-      ENV["SLACK_TEAM"] = "fugafuga"
-      post "/", params
-    end
-
-    subject(:response) { last_response }
+    before { post "/", params }
 
     it_behaves_like "200 ok"
     it_behaves_like "empty body"
-    specify { expect(words_file.size).to eq(0) }
+    it_behaves_like "the size of word file is 0"
+  end
+
+  context "no 'text' key in params" do
+    before { post "/", {team_domain: team_domain} }
+
+    it_behaves_like "200 ok"
+    it_behaves_like "empty body"
+    it_behaves_like "the size of word file is 0"
   end
 end

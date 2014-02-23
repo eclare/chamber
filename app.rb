@@ -111,7 +111,7 @@ post "/" do
              "\"#{translated}\""
            end
     slack_client.notify(says)
-  else
+  elsif word
     File.open(SLACK_WORDS_FILE, 'a') do |f|
       f.puts word
     end

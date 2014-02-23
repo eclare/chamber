@@ -4,6 +4,7 @@ Chamber
 ![screenshot](screenshot.png)
 
 [![Build Status](https://travis-ci.org/rightgo09/chamber.png?branch=master)](https://travis-ci.org/rightgo09/chamber)
+[![Coverage Status](https://coveralls.io/repos/rightgo09/chamber/badge.png?branch=master)](https://coveralls.io/r/rightgo09/chamber?branch=master)
 
 Chamber is a tool that translates [Slack](https://slack.com/) messages using [The Microsoft Translator API](http://www.microsoft.com/en-us/translator/developers.aspx).
 Currently, Chamber supports translating from English to Japanese and from Japanese to English.

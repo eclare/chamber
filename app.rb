@@ -100,7 +100,7 @@ post "/" do
   if TRIGGER_REGEXP.any? { |trigger| trigger === word }
     latest = open("|tail -n 1 < #{SLACK_WORDS_FILE}") { |f| f.gets.chomp }
 
-    logger.info("original word is #{translated}")
+    logger.info("original word is #{latest}")
     way = judge_lang(latest)
     translated = translate(latest, way)
     logger.info("translated word is #{translated}")
